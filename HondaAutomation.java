@@ -1,7 +1,10 @@
 package practicecases;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -145,11 +148,27 @@ public class HondaAutomation {
 		
 		
 		//16) Print all the 3 models and their prices
-		WebElement table = driver.findElement(By.id("gvshow"));
-		List<WebElement> models = table.findElements(By.tagName("td"));
-		for (WebElement model : models) {
-			System.out.println(model.getText());
+		
+		List<WebElement> list = driver.findElementsByXPath("//table[@id='gvshow']/tbody/tr");
+		int size = list.size();
+		List<WebElement> model = driver.findElementsByXPath("//table[@id='gvshow']//tbody//tr//td[contains(text(),'ACTIVA')]");
+		List<WebElement> price = driver.findElementsByXPath("//table[@id='gvshow']//tbody//tr//td[contains(text(),'Rs')]");
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		for (int i = 0; i < size; i++) {
+			String nameOfModel = model.get(i).getText();
+			String priceOfModel = price.get(i).getText();
+			map.put(nameOfModel , priceOfModel);
 		}
+		System.out.println("all the 3 models and their respective prices");
+		for (Entry<String, String> eachEntry : map.entrySet() ) {
+			System.out.println(eachEntry.getKey()+"-->"+eachEntry.getValue());
+		}
+		
+//		WebElement table = driver.findElement(By.id("gvshow"));
+//		List<WebElement> models = table.findElements(By.tagName("td"));
+//		for (WebElement model : models) {
+//			System.out.println(model.getText());
+//		}
 
 		//17) Close the Browser
 		driver.quit();
